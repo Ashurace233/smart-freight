@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services - Smart Freight Express</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --accent-color: #f59e0b;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f9fafb;
+            --white: #ffffff;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            padding: 1rem 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .services {
+            background-color: var(--white);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            padding: 2.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary-color);
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .service-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-features {
+            list-style: none;
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+
+        .service-features li {
+            color: var(--text-light);
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: var(--text-dark);
+            color: var(--white);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            line-height: 1.8;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logo-container {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo-container">
+                    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="cubeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#14b8a6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0d9488;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="metallicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#d97706;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- 3D Cube - Front Face -->
+                        <path d="M25 45 L50 25 L75 45 L50 65 Z" fill="url(#cubeGradient)"/>
+                        <!-- 3D Cube - Top Face -->
+                        <path d="M50 25 L75 45 L75 30 L50 10 Z" fill="#0f766e" opacity="0.8"/>
+                        <!-- 3D Cube - Right Face -->
+                        <path d="M75 45 L75 30 L50 50 L50 65 Z" fill="#0d9488" opacity="0.7"/>
+                        <!-- SF Letters cutout/embossed -->
+                        <text x="50" y="55" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="url(#metallicGradient)" text-anchor="middle">SF</text>
+                    </svg>
+                    <div class="logo-text">
+                        <h1>Smart Freight Express</h1>
+                        <p class="tagline">Shipping & Logistics</p>
+                    </div>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="tracking.html">Track Shipment</a></li>
+                    <li><a href="services.html" class="active">Services</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>Our Comprehensive Services</h1>
+            <p>End-to-end logistics solutions tailored to meet your business needs</p>
+        </div>
+    </div>
+
+    <main>
+        <section class="services">
+            <div class="container">
+                <h2 class="section-title">What We Offer</h2>
+                <p class="section-subtitle">Professional shipping and logistics services worldwide</p>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">✈️</div>
+                        <h3>Air Freight Services</h3>
+                        <p>Express air cargo solutions for time-critical shipments. We operate through major international airports with same-day and next-day delivery options.</p>
+                        <ul class="service-features">
+                            <li>Same-day and next-day delivery</li>
+                            <li>Major international airport coverage</li>
+                            <li>Temperature-controlled options</li>
+                            <li>Express customs clearance</li>
+                        </ul>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🚢</div>
+                        <h3>Ocean Freight</h3>
+                        <p>Cost-effective maritime shipping for bulk cargo and large volumes. Full container load (FCL) and less than container load (LCL) services available.</p>
+                        <ul class="service-features">
+                            <li>FCL and LCL options</li>
+                            <li>Bulk cargo handling</li>
+                            <li>Global port network</li>
+                            <li>Competitive rates</li>
+                        </ul>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🚚</div>
+                        <h3>Ground Transportation</h3>
+                        <p>Comprehensive road freight network covering regional and cross-border deliveries with real-time tracking and temperature-controlled options.</p>
+                        <ul class="service-features">
+                            <li>Regional and cross-border</li>
+                            <li>Real-time tracking</li>
+                            <li>Temperature-controlled</li>
+                            <li>Flexible scheduling</li>
+                        </ul>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">📦</div>
+                        <h3>Warehousing & Distribution</h3>
+                        <p>State-of-the-art storage facilities with 24/7 security, inventory management, and automated distribution systems across strategic locations.</p>
+                        <ul class="service-features">
+                            <li>24/7 security monitoring</li>
+                            <li>Automated inventory systems</li>
+                            <li>Strategic locations</li>
+                            <li>Distribution services</li>
+                        </ul>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🔒</div>
+                        <h3>Secure Cargo Handling</h3>
+                        <p>Specialized protocols for high-value goods, sensitive materials, and regulated commodities with comprehensive insurance coverage.</p>
+                        <ul class="service-features">
+                            <li>High-value cargo protection</li>
+                            <li>Specialized security protocols</li>
+                            <li>Comprehensive insurance</li>
+                            <li>Regulated commodities</li>
+                        </ul>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">📊</div>
+                        <h3>Supply Chain Management</h3>
+                        <p>Integrated logistics consulting and optimization services to streamline operations, reduce costs, and improve delivery performance.</p>
+                        <ul class="service-features">
+                            <li>Logistics consulting</li>
+                            <li>Process optimization</li>
+                            <li>Cost reduction strategies</li>
+                            <li>Performance improvement</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Smart Freight Express</h4>
+                    <p>Your trusted partner in global logistics since 2007. Delivering excellence in shipping and freight solutions worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="tracking.html">Track Shipment</a>
+                    <a href="services.html">Our Services</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Information</h4>
+                    <p>Email: <a href="mailto:smartfreightexpressshipment@gmail.com" style="color: var(--accent-color);">smartfreightexpressshipment@gmail.com</a></p>
+                    <p>For immediate assistance, please use our tracking system.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Certifications</h4>
+                    <p>ISO 9001:2015 Certified</p>
+                    <p>IATA Accredited</p>
+                    <p>C-TPAT Compliant</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Smart Freight Express Shipping and Logistics. All rights reserved.</p>
+                <p>Founded in 2007 | Operating Worldwide</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

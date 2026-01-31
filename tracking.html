@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Shipment Tracking - Smart Freight Express</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --accent-color: #f59e0b;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f9fafb;
+            --white: #ffffff;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            padding: 1rem 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        /* Tracking Section */
+        .tracking-section {
+            min-height: 70vh;
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        .tracking-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tracking-input-box {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .input-group label {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.875rem 2.5rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading Spinner */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .spinner {
+            border: 5px solid var(--border-color);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Tracking Results */
+        .tracking-results {
+            background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .shipment-header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .shipment-header h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .tracking-number {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .shipment-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            color: var(--success-color);
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        /* Map Container */
+        .map-container {
+            margin: 2.5rem 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--border-color);
+        }
+
+        .map-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .map-header h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        #tracking-map {
+            width: 100%;
+            height: 550px;
+        }
+
+        /* Timeline */
+        .tracking-timeline {
+            margin-top: 3rem;
+            padding-top: 2.5rem;
+            border-top: 3px solid var(--border-color);
+        }
+
+        .tracking-timeline h4 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--success-color) 0%, var(--accent-color) 50%, var(--secondary-color) 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2.5rem;
+            padding-left: 2.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.25rem;
+            top: 0.4rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            border: 4px solid var(--white);
+            box-shadow: 0 0 0 3px var(--secondary-color);
+        }
+
+        .timeline-item.completed::before {
+            background-color: var(--success-color);
+            box-shadow: 0 0 0 3px var(--success-color);
+        }
+
+        .timeline-item.active::before {
+            background-color: var(--accent-color);
+            box-shadow: 0 0 0 3px var(--accent-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+
+        .timeline-location {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-route {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .timeline-date {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .timeline-item.completed .timeline-location,
+        .timeline-item.completed .timeline-route {
+            color: var(--success-color);
+        }
+
+        .timeline-item.active .timeline-location {
+            color: var(--accent-color);
+        }
+
+        /* Error Message */
+        .tracking-error {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: var(--error-color);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 2rem;
+            border: 2px solid var(--error-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Info Box */
+        .info-box {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-box p {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .input-wrapper {
+                flex-direction: column;
+            }
+
+            .shipment-info {
+                grid-template-columns: 1fr;
+            }
+
+            #tracking-map {
+                height: 400px;
+            }
+
+            .timeline {
+                padding-left: 2rem;
+            }
+
+            .logo-container {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo-container">
+                    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="cubeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#14b8a6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0d9488;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="metallicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#d97706;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- 3D Cube - Front Face -->
+                        <path d="M25 45 L50 25 L75 45 L50 65 Z" fill="url(#cubeGradient)"/>
+                        <!-- 3D Cube - Top Face -->
+                        <path d="M50 25 L75 45 L75 30 L50 10 Z" fill="#0f766e" opacity="0.8"/>
+                        <!-- 3D Cube - Right Face -->
+                        <path d="M75 45 L75 30 L50 50 L50 65 Z" fill="#0d9488" opacity="0.7"/>
+                        <!-- SF Letters cutout/embossed -->
+                        <text x="50" y="55" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="url(#metallicGradient)" text-anchor="middle">SF</text>
+                    </svg>
+                    <div class="logo-text">
+                        <h1>Smart Freight Express</h1>
+                        <p class="tagline">Shipping & Logistics</p>
+                    </div>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="tracking.html" class="active">Track Shipment</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="tracking-section">
+            <div class="container">
+                <h2 class="section-title">Real-Time Shipment Tracking</h2>
+                <p class="section-subtitle">Enter your tracking number to view detailed shipment information and live location updates</p>
+                <div class="tracking-container">
+                    <div class="info-box">
+                        <p><strong>Tracking Information:</strong> Our advanced tracking system provides real-time updates on your shipment's location, status, and estimated delivery time. Track your cargo 24/7 from origin to destination.</p>
+                    </div>
+
+                    <div class="tracking-input-box">
+                        <form id="tracking-form">
+                            <div class="input-group">
+                                <label for="tracking-code">Enter Your Tracking Number</label>
+                                <div class="input-wrapper">
+                                    <input 
+                                        type="text" 
+                                        id="tracking-code" 
+                                        placeholder="e.g., xxxxxxxxx"
+                                        required
+                                    >
+                                    <button type="submit" class="btn btn-primary" id="track-btn">Track Shipment</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="loading-overlay" class="loading-overlay">
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                            <div class="loading-text">Retrieving shipment information...</div>
+                        </div>
+                    </div>
+
+                    <div id="tracking-results" class="tracking-results hidden">
+                        <div class="shipment-header">
+                            <h3>Shipment Details</h3>
+                            <p class="tracking-number">Tracking Number: <strong id="display-code"></strong></p>
+                        </div>
+                        
+                        <div class="shipment-info">
+                            <div class="info-item">
+                                <span class="info-label">Item Description</span>
+                                <span class="info-value" id="item-name">Gold</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Origin</span>
+                                <span class="info-value" id="origin">Amsterdam Schiphol Airport (AMS)</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Final Destination</span>
+                                <span class="info-value" id="destination">Flagstaff, Arizona</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Current Status</span>
+                                <span class="info-value status-active" id="status">In Transit</span>
+                            </div>
+                        </div>
+
+                        <div class="map-container">
+                            <div class="map-header">
+                                <h4>Live Shipment Route & Location</h4>
+                            </div>
+                            <div id="tracking-map"></div>
+                        </div>
+
+                        <div class="tracking-timeline">
+                            <h4>Detailed Shipment Timeline</h4>
+                            <div class="timeline" id="timeline">
+                                <!-- Timeline items will be inserted here by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tracking-error" class="tracking-error hidden">
+                        <p>❌ Tracking number not found. Please verify your tracking number and try again.</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.95rem;">If you continue to experience issues, please contact our customer service team.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Smart Freight Express Shipping and Logistics. All rights reserved.</p>
+            <p>Founded in 2007 | Real-Time Tracking System</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Tracking data for the specific tracking number
+        const TRACKING_DATA = {
+            '347493882': {
+                item: 'Gold',
+                origin: 'Amsterdam Schiphol Airport (AMS)',
+                destination: 'Flagstaff, Arizona',
+                status: 'In Transit',
+                locations: [
+                    {
+                        name: 'Amsterdam Schiphol Airport (AMS)',
+                        lat: 52.3105,
+                        lng: 4.7683,
+                        route: 'Origin - Shipment received',
+                        date: 'January 29, 2026 - 5:37 PM',
+                        status: 'completed'
+                    },
+                    {
+                        name: 'Frankfurt Airport (FRA)',
+                        lat: 50.0379,
+                        lng: 8.5622,
+                        route: 'Stopover 1: Amsterdam Schiphol (AMS) → Frankfurt Airport (FRA)',
+                        date: 'In Transit',
+                        status: 'active'
+                    },
+                    {
+                        name: 'Paris Charles de Gaulle (CDG)',
+                        lat: 49.0097,
+                        lng: 2.5479,
+                        route: 'Stopover 2: Frankfurt Airport (FRA) → Paris Charles de Gaulle (CDG)',
+                        date: 'Pending',
+                        status: 'pending'
+                    },
+                    {
+                        name: 'Zurich Airport (ZRH)',
+                        lat: 47.4647,
+                        lng: 8.5492,
+                        route: 'Stopover 3: Paris Charles de Gaulle (CDG) → Zurich Airport (ZRH)',
+                        date: 'Pending',
+                        status: 'pending'
+                    },
+                    {
+                        name: 'London Heathrow (LHR)',
+                        lat: 51.4700,
+                        lng: -0.4543,
+                        route: 'Leg 4: Zurich Airport (ZRH) → London Heathrow (LHR)',
+                        date: 'Pending',
+                        status: 'pending'
+                    },
+                    {
+                        name: 'Flagstaff, Arizona',
+                        lat: 35.1983,
+                        lng: -111.6513,
+                        route: 'Final Destination',
+                        date: 'Pending',
+                        status: 'pending'
+                    }
+                ]
+            }
+        };
+
+        let map = null;
+        let markers = [];
+        let polyline = null;
+
+        // Handle tracking form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const trackingForm = document.getElementById('tracking-form');
+            const trackingResults = document.getElementById('tracking-results');
+            const trackingError = document.getElementById('tracking-error');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const trackBtn = document.getElementById('track-btn');
+            
+            if (trackingForm) {
+                trackingForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const trackingCode = document.getElementById('tracking-code').value.trim();
+                    
+                    // Hide previous results
+                    trackingResults.classList.add('hidden');
+                    trackingError.classList.add('hidden');
+                    
+                    // Show loading overlay
+                    loadingOverlay.classList.add('active');
+                    trackBtn.disabled = true;
+                    
+                    // Random delay between 5-9 seconds
+                    const delay = Math.floor(Math.random() * 4000) + 5000; // 5000-9000ms
+                    
+                    setTimeout(function() {
+                        // Hide loading overlay
+                        loadingOverlay.classList.remove('active');
+                        trackBtn.disabled = false;
+                        
+                        // Check if tracking code exists
+                        if (TRACKING_DATA[trackingCode]) {
+                            displayTrackingInfo(trackingCode, TRACKING_DATA[trackingCode]);
+                            trackingResults.classList.remove('hidden');
+                        } else {
+                            trackingError.classList.remove('hidden');
+                        }
+                    }, delay);
+                });
+            }
+        });
+
+        // Display tracking information
+        function displayTrackingInfo(code, data) {
+            // Update shipment details
+            document.getElementById('display-code').textContent = code;
+            document.getElementById('item-name').textContent = data.item;
+            document.getElementById('origin').textContent = data.origin;
+            document.getElementById('destination').textContent = data.destination;
+            document.getElementById('status').textContent = data.status;
+            
+            // Initialize or clear map
+            if (map) {
+                map.remove();
+                markers = [];
+                if (polyline) {
+                    map.removeLayer(polyline);
+                }
+            }
+            
+            // Initialize map
+            map = L.map('tracking-map').setView([50.0, 5.0], 5);
+            
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+            
+            // Add markers and create route
+            const routeCoordinates = [];
+            
+            data.locations.forEach((location, index) => {
+                routeCoordinates.push([location.lat, location.lng]);
+                
+                // Determine marker color based on status
+                let markerColor = '#3b82f6'; // default blue
+                if (location.status === 'completed') {
+                    markerColor = '#10b981'; // green
+                } else if (location.status === 'active') {
+                    markerColor = '#f59e0b'; // orange
+                }
+                
+                // Create custom icon
+                const icon = L.divIcon({
+                    className: 'custom-marker',
+                    html: `<div style="
+                        width: 24px;
+                        height: 24px;
+                        background-color: ${markerColor};
+                        border: 4px solid white;
+                        border-radius: 50%;
+                        box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+                    "></div>`,
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 12]
+                });
+                
+                const marker = L.marker([location.lat, location.lng], { icon: icon })
+                    .addTo(map)
+                    .bindPopup(`<strong>${location.name}</strong><br>${location.route}<br><small>${location.date}</small>`);
+                
+                markers.push(marker);
+            });
+            
+            // Draw route line
+            polyline = L.polyline(routeCoordinates, {
+                color: '#3b82f6',
+                weight: 4,
+                opacity: 0.8,
+                dashArray: '10, 5'
+            }).addTo(map);
+            
+            // Fit map to show all markers
+            const group = new L.featureGroup(markers);
+            map.fitBounds(group.getBounds().pad(0.15));
+            
+            // Update timeline
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            data.locations.forEach((item, index) => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = `timeline-item ${item.status}`;
+                
+                timelineItem.innerHTML = `
+                    <div class="timeline-location">${item.name}</div>
+                    <div class="timeline-route">${item.route}</div>
+                    <div class="timeline-date">${item.date}</div>
+                `;
+                
+                timeline.appendChild(timelineItem);
+            });
+        }
+    </script>
+</body>
+</html>
