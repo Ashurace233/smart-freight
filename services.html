@@ -162,18 +162,30 @@
 
         .service-card {
             background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
-            padding: 2.5rem;
+            padding: 0;
             border-radius: 12px;
             text-align: center;
             transition: all 0.3s;
             border: 1px solid var(--border-color);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
         }
 
         .service-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
             border-color: var(--primary-color);
+        }
+
+        .service-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .service-card-content {
+            padding: 2.5rem;
         }
 
         .service-icon {
@@ -332,70 +344,88 @@
                 <p class="section-subtitle">Professional shipping and logistics services worldwide</p>
                 <div class="services-grid">
                     <div class="service-card">
-                        <div class="service-icon">✈️</div>
-                        <h3>Air Freight Services</h3>
-                        <p>Express air cargo solutions for time-critical shipments. We operate through major international airports with same-day and next-day delivery options.</p>
-                        <ul class="service-features">
-                            <li>Same-day and next-day delivery</li>
-                            <li>Major international airport coverage</li>
-                            <li>Temperature-controlled options</li>
-                            <li>Express customs clearance</li>
-                        </ul>
+                        <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Air freight cargo plane" class="service-image">
+                        <div class="service-card-content">
+                            <div class="service-icon">✈️</div>
+                            <h3>Air Freight Services</h3>
+                            <p>Express air cargo solutions for time-critical shipments. We operate through major international airports with same-day and next-day delivery options.</p>
+                            <ul class="service-features">
+                                <li>Same-day and next-day delivery</li>
+                                <li>Major international airport coverage</li>
+                                <li>Temperature-controlled options</li>
+                                <li>Express customs clearance</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="service-card">
-                        <div class="service-icon">🚢</div>
-                        <h3>Ocean Freight</h3>
-                        <p>Cost-effective maritime shipping for bulk cargo and large volumes. Full container load (FCL) and less than container load (LCL) services available.</p>
-                        <ul class="service-features">
-                            <li>FCL and LCL options</li>
-                            <li>Bulk cargo handling</li>
-                            <li>Global port network</li>
-                            <li>Competitive rates</li>
-                        </ul>
+                        <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ocean freight shipping containers" class="service-image">
+                        <div class="service-card-content">
+                            <div class="service-icon">🚢</div>
+                            <h3>Ocean Freight</h3>
+                            <p>Cost-effective maritime shipping for bulk cargo and large volumes. Full container load (FCL) and less than container load (LCL) services available.</p>
+                            <ul class="service-features">
+                                <li>FCL and LCL options</li>
+                                <li>Bulk cargo handling</li>
+                                <li>Global port network</li>
+                                <li>Competitive rates</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="service-card">
-                        <div class="service-icon">🚚</div>
-                        <h3>Ground Transportation</h3>
-                        <p>Comprehensive road freight network covering regional and cross-border deliveries with real-time tracking and temperature-controlled options.</p>
-                        <ul class="service-features">
-                            <li>Regional and cross-border</li>
-                            <li>Real-time tracking</li>
-                            <li>Temperature-controlled</li>
-                            <li>Flexible scheduling</li>
-                        </ul>
+                        <img src="https://images.unsplash.com/photo-1601581875036-9ae91d2142d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ground transportation truck" class="service-image">
+                        <div class="service-card-content">
+                            <div class="service-icon">🚚</div>
+                            <h3>Ground Transportation</h3>
+                            <p>Comprehensive road freight network covering regional and cross-border deliveries with real-time tracking and temperature-controlled options.</p>
+                            <ul class="service-features">
+                                <li>Regional and cross-border</li>
+                                <li>Real-time tracking</li>
+                                <li>Temperature-controlled</li>
+                                <li>Flexible scheduling</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="service-card">
-                        <div class="service-icon">📦</div>
-                        <h3>Warehousing & Distribution</h3>
-                        <p>State-of-the-art storage facilities with 24/7 security, inventory management, and automated distribution systems across strategic locations.</p>
-                        <ul class="service-features">
-                            <li>24/7 security monitoring</li>
-                            <li>Automated inventory systems</li>
-                            <li>Strategic locations</li>
-                            <li>Distribution services</li>
-                        </ul>
+                        <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Warehouse and distribution center" class="service-image">
+                        <div class="service-card-content">
+                            <div class="service-icon">📦</div>
+                            <h3>Warehousing & Distribution</h3>
+                            <p>State-of-the-art storage facilities with 24/7 security, inventory management, and automated distribution systems across strategic locations.</p>
+                            <ul class="service-features">
+                                <li>24/7 security monitoring</li>
+                                <li>Automated inventory systems</li>
+                                <li>Strategic locations</li>
+                                <li>Distribution services</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="service-card">
-                        <div class="service-icon">🔒</div>
-                        <h3>Secure Cargo Handling</h3>
-                        <p>Specialized protocols for high-value goods, sensitive materials, and regulated commodities with comprehensive insurance coverage.</p>
-                        <ul class="service-features">
-                            <li>High-value cargo protection</li>
-                            <li>Specialized security protocols</li>
-                            <li>Comprehensive insurance</li>
-                            <li>Regulated commodities</li>
-                        </ul>
+                        <img src="https://images.unsplash.com/photo-1605745341112-85968b19335b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Secure cargo handling" class="service-image">
+                        <div class="service-card-content">
+                            <div class="service-icon">🔒</div>
+                            <h3>Secure Cargo Handling</h3>
+                            <p>Specialized protocols for high-value goods, sensitive materials, and regulated commodities with comprehensive insurance coverage.</p>
+                            <ul class="service-features">
+                                <li>High-value cargo protection</li>
+                                <li>Specialized security protocols</li>
+                                <li>Comprehensive insurance</li>
+                                <li>Regulated commodities</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="service-card">
-                        <div class="service-icon">📊</div>
-                        <h3>Supply Chain Management</h3>
-                        <p>Integrated logistics consulting and optimization services to streamline operations, reduce costs, and improve delivery performance.</p>
-                        <ul class="service-features">
-                            <li>Logistics consulting</li>
-                            <li>Process optimization</li>
-                            <li>Cost reduction strategies</li>
-                            <li>Performance improvement</li>
-                        </ul>
+                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Supply chain management" class="service-image">
+                        <div class="service-card-content">
+                            <div class="service-icon">📊</div>
+                            <h3>Supply Chain Management</h3>
+                            <p>Integrated logistics consulting and optimization services to streamline operations, reduce costs, and improve delivery performance.</p>
+                            <ul class="service-features">
+                                <li>Logistics consulting</li>
+                                <li>Process optimization</li>
+                                <li>Cost reduction strategies</li>
+                                <li>Performance improvement</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -109,7 +109,10 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.85) 0%, rgba(59, 130, 246, 0.85) 100%), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: var(--white);
             padding: 6rem 0;
             text-align: center;
@@ -200,9 +203,29 @@
         }
 
         .intro-content {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             text-align: center;
+        }
+
+        .intro-with-image {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .intro-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .intro-text {
+            text-align: left;
         }
 
         .intro-content p {
@@ -242,13 +265,32 @@
         }
 
         .feature-item {
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
             background-color: var(--white);
-            padding: 2rem;
+            padding: 0;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-content {
+            padding: 2rem;
+        }
+
+        .feature-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .feature-icon {
+            margin-top: 1rem;
         }
 
         .feature-icon {
@@ -327,6 +369,14 @@
                 grid-template-columns: 1fr;
             }
 
+            .intro-with-image {
+                grid-template-columns: 1fr;
+            }
+
+            .intro-text {
+                text-align: center;
+            }
+
             .logo-container {
                 flex-direction: column;
                 gap: 0.5rem;
@@ -391,11 +441,16 @@
             <div class="container">
                 <div class="intro-content">
                     <h2 class="section-title">Welcome to Smart Freight Express</h2>
-                    <p>Founded in 2007, Smart Freight Express Shipping and Logistics has established itself as a premier global logistics provider. With over 17 years of industry expertise, we've built a reputation for reliability, innovation, and customer-centric service.</p>
-                    <p>Our extensive network spans major transportation hubs across Europe, North America, Asia, and beyond. We specialize in handling everything from standard commercial shipments to high-value cargo requiring specialized security protocols.</p>
-                    <div class="cta-buttons">
-                        <a href="services.html" class="btn btn-primary">Our Services</a>
-                        <a href="about.html" class="btn btn-secondary">Learn More</a>
+                    <div class="intro-with-image">
+                        <div class="intro-text">
+                            <p>Founded in 2007, Smart Freight Express Shipping and Logistics has established itself as a premier global logistics provider. With over 17 years of industry expertise, we've built a reputation for reliability, innovation, and customer-centric service.</p>
+                            <p>Our extensive network spans major transportation hubs across Europe, North America, Asia, and beyond. We specialize in handling everything from standard commercial shipments to high-value cargo requiring specialized security protocols.</p>
+                            <div class="cta-buttons">
+                                <a href="services.html" class="btn btn-primary">Our Services</a>
+                                <a href="about.html" class="btn btn-secondary">Learn More</a>
+                            </div>
+                        </div>
+                        <img src="images/warehouse-managers-worker-working-together-1.jpg" alt="Warehouse managers and workers" class="intro-image">
                     </div>
                 </div>
             </div>
@@ -407,43 +462,49 @@
                 <p class="section-subtitle">Industry-leading features that set us apart</p>
                 <div class="features-grid">
                     <div class="feature-item">
-                        <div class="feature-icon">🌐</div>
                         <div class="feature-content">
+                            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Global shipping network" class="feature-image">
+                            <div class="feature-icon"></div>
                             <h4>Global Network</h4>
                             <p>Extensive worldwide coverage with strategic partnerships ensuring seamless cross-border operations.</p>
                         </div>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-icon">📱</div>
                         <div class="feature-content">
+                            <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Real-time tracking technology" class="feature-image">
+                            <div class="feature-icon"></div>
                             <h4>Real-Time Tracking</h4>
                             <p>Advanced tracking technology providing live updates on your shipment's location and status.</p>
                         </div>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-icon">🛡️</div>
                         <div class="feature-content">
+                            <img src="https://images.unsplash.com/photo-1605745341112-85968b19335b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Secure cargo handling" class="feature-image">
+                            <div class="feature-icon"></div>
                             <h4>Secure Handling</h4>
                             <p>Comprehensive security measures and insurance options to protect your valuable cargo.</p>
                         </div>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-icon">⚡</div>
                         <div class="feature-content">
+                            <img src="images/smart-warehouse.jpg" alt="Fast processing and customs clearance" class="feature-image">
+                            <div class="feature-icon"></div>
                             <h4>Fast Processing</h4>
                             <p>Streamlined operations and efficient customs clearance to minimize transit times.</p>
                         </div>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-icon">💼</div>
                         <div class="feature-content">
+                            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Professional logistics team" class="feature-image">
+                            <div class="feature-icon"></div>
                             <h4>Expert Team</h4>
                             <p>Experienced logistics professionals dedicated to providing exceptional customer service.</p>
                         </div>
                     </div>
                     <div class="feature-item">
-                        <div class="feature-icon">💰</div>
                         <div class="feature-content">
+                            <img src="https://images.unsplash.com/photo-1605745341112-85968b19335b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Competitive pricing" class="feature-image">
+                            <div class="feature-icon"></div>
                             <h4>Competitive Pricing</h4>
                             <p>Transparent, competitive rates with flexible payment options and volume discounts.</p>
                         </div>
